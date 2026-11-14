@@ -64,8 +64,8 @@
     }
 
     function apply(state) {
-      if (typeof gtag === "function") {
-        gtag("consent", "update", {
+      if (typeof window.gtag === "function") {
+        window.gtag("consent", "update", {
           ad_storage: state,
           ad_user_data: state,
           ad_personalization: state,

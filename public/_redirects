@@ -4,7 +4,7 @@
 # Safety net: if a legacy Hashnode URL is requested on the NEW host (e.g. an
 # inbound link had its hostname swapped by hand), send it to the real post URL.
 # The authoritative old-host redirects live in Cloudflare Redirect Rules on
-# blog.amalpk.in — see SEO-RESEARCH-REPORT.md §0.4.
+# blog.amalpk.in.
 
 /cve-2025-21298                                       /posts/cve-2025-21298/                                       301
 /web-cache-deception                                  /posts/web-cache-deception/                                  301

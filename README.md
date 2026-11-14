@@ -1,140 +1,115 @@
 # Amal PK Notes
 
-![AstroPaper](public/default-og.jpg)
-[![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/community/file/1356898632249991861)
-![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![GitHub](https://img.shields.io/github/license/satnaing/astro-paper?color=%232F3741&style=for-the-badge)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=for-the-badge)](http://commitizen.github.io/cz-cli/)
+Amal PK Notes is Amal PK's cybersecurity blog:
 
-Amal PK Notes is a security-focused blog covering application security,
-penetration testing, Android security, vulnerability research, and Hack The Box
-writeups. It is built with Astro and based on the AstroPaper theme.
+**https://notes.amalpk.in**
 
-Read the [blog posts](https://notes.amalpk.in/posts/) or visit the
-[portfolio](https://amalpk.in/).
+The site publishes practical notes and writeups about application security,
+penetration testing, Android security, vulnerability research, and Hack The Box.
+The portfolio is available at **https://amalpk.in**.
 
-## 🔥 Features
+## Features
 
-- [x] type-safe markdown
-- [x] super fast performance
-- [x] accessible (Keyboard/VoiceOver)
-- [x] responsive (mobile ~ desktops)
-- [x] SEO-friendly
-- [x] light & dark mode
-- [x] static search ([Pagefind](https://pagefind.app/))
-- [x] draft posts & pagination
-- [x] sitemap & rss feed
-- [x] MDX support
-- [x] table of contents beside posts
-- [x] followed best practices
-- [x] highly customizable
-- [x] dynamic OG image generation for blog posts
-- [x] i18n ready
+- Astro static site with Markdown and MDX content
+- Responsive light and dark themes
+- Pagefind static search
+- Collection and tag directories
+- Table of contents for long posts
+- RSS feed and sitemap generation
+- Open Graph images generated with Satori and Sharp
+- JSON-LD structured data for the site and articles
+- Google Analytics 4 and Google Tag Manager integration
+- Cloudflare Pages deployment
 
-_Note: I've tested screen-reader accessibility of AstroPaper using **VoiceOver** on Mac and **TalkBack** on Android. I couldn't test all other screen-readers out there. However, accessibility enhancements in AstroPaper should be working fine on others as well._
+## Tech stack
 
-## 🚀 Project Structure
+- [Astro](https://astro.build/)
+- [AstroPaper](https://github.com/satnaing/astro-paper)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Pagefind](https://pagefind.app/)
+- [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/)
+- [Cloudflare Pages](https://pages.cloudflare.com/)
 
-Inside of AstroPaper, you'll see the following folders and files:
+## Project structure
 
-```bash
+```text
 /
 ├── public/
-│   ├── pagefind/          # auto-generated on build
-│   ├── images/
-│   │   └── posts/         # images referenced by blog posts
-│   ├── favicon.svg
+│   ├── images/posts/       # Images used by blog posts
+│   ├── favicon.ico
 │   └── default-og.jpg
 ├── src/
-│   ├── assets/
-│   │   ├── icons/
-│   │   └── images/
 │   ├── components/
-│   ├── content/
-│   │   └── posts/
-│   │       └── some-blog-posts.md
-│   ├── i18n/
+│   ├── content/posts/      # Markdown and MDX blog posts
 │   ├── layouts/
 │   ├── pages/
 │   ├── scripts/
 │   ├── styles/
 │   ├── types/
-│   ├── utils/
-│   ├── config.ts
-│   └── content.config.ts
-├── astro-paper.config.ts  # user-defined configurations
-└── astro.config.ts
+│   └── utils/
+├── astro-paper.config.ts   # Site, theme, analytics, and author settings
+└── astro.config.ts         # Astro integrations and build settings
 ```
 
-All blog posts are stored in the `src/content/posts/` directory. You can organise posts into subdirectories — the subdirectory name becomes part of the post URL.
+## Requirements
 
-## 📖 Project documentation
+- Node.js `>=22.23.4`
+- pnpm `10.16.1` or a compatible pnpm 10 release
 
-- [SEO research report](SEO-RESEARCH-REPORT.md)
-- [SEO implementation tracker](SEO-IMPLEMENTATION-TRACKER.md)
-
-## 💻 Tech Stack
-
-**Main Framework** - [Astro](https://astro.build/)  
-**Type Checking** - [TypeScript](https://www.typescriptlang.org/)  
-**Styling** - [TailwindCSS](https://tailwindcss.com/)  
-**UI/UX** - [Figma Design File](https://www.figma.com/community/file/1356898632249991861)  
-**Static Search** - [Pagefind](https://pagefind.app/)  
-**Icons** - [Tablers](https://tabler-icons.io/)  
-**Code Formatting** - [Prettier](https://prettier.io/)  
-**Deployment** - [Cloudflare Pages](https://pages.cloudflare.com/)  
-**Linting** - [ESLint](https://eslint.org)  
-**Dynamic OG images** - [Satori](https://github.com/vercel/satori) + [Sharp](https://sharp.pixelplumbing.com/) + [Astro Fonts](https://docs.astro.build/en/guides/fonts/)
-
-## 👨🏻‍💻 Running Locally
+## Local development
 
 ```bash
-# install dependencies
 pnpm install
-
-# start the project
 pnpm dev
 ```
 
-## Google Site Verification (optional)
+The development server runs at `http://localhost:4321`.
 
-You can add your [Google Site Verification HTML tag](https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag) by setting `site.googleVerification` in `astro-paper.config.ts`:
+## Useful commands
 
-```ts file="astro-paper.config.ts"
-export default defineAstroPaperConfig({
-  site: {
-    // ...
-    googleVerification: "your-google-site-verification-value",
-  },
-  // ...
-});
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Start the development server |
+| `pnpm build` | Type-check, build, and index the production site |
+| `pnpm preview` | Preview the production build locally |
+| `pnpm astro check` | Check Astro and TypeScript diagnostics |
+| `pnpm lint` | Run ESLint |
+| `pnpm format:check` | Check formatting with Prettier |
+| `pnpm seo:validate` | Validate generated SEO output |
+| `pnpm alt:audit` | Check image alt text |
+
+## Content
+
+Create posts in `src/content/posts/` using the existing frontmatter schema.
+Post images belong in `public/images/posts/<post-slug>/`. Run `pnpm build`
+before publishing to verify content, generated images, search indexing, and
+metadata.
+
+## Deployment
+
+The production site is deployed through Cloudflare Pages from the `main`
+branch of the `0xKrat0s/amalpk-notes` repository.
+
+For a local production check:
+
+```bash
+pnpm build
+pnpm preview
 ```
 
-> See [this discussion](https://github.com/satnaing/astro-paper/discussions/334#discussioncomment-10139247) for adding AstroPaper to the Google Search Console.
+## Attribution and license
 
-## 🧞 Commands
+This project is a customized personal blog built from
+[AstroPaper](https://github.com/satnaing/astro-paper), created and maintained by
+[satnaing](https://github.com/satnaing). AstroPaper's original MIT license and
+attribution are retained in this project.
 
-All commands are run from the root of the project, from a terminal:
+The Amal PK Notes custom content, branding, configuration, and blog posts are
+Copyright © 2026 Amal PK. The upstream AstroPaper code remains available under
+its original MIT license.
 
-| Command          | Action                                                                                                                           |
-| :--------------- | :------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install`   | Installs dependencies                                                                                                            |
-| `pnpm dev`       | Starts local dev server at `localhost:4321`                                                                                      |
-| `pnpm build`     | Type-checks, builds the site, runs Pagefind indexing, and copies the index to `public/pagefind/`                                 |
-| `pnpm preview`   | Preview your build locally, before deploying                                                                                     |
-| `pnpm sync`      | Generates TypeScript types for all Astro modules. [Learn more](https://docs.astro.build/en/reference/cli-reference/#astro-sync). |
-| `pnpm astro ...` | Run CLI commands like `astro add`, `astro check`                                                                                 |
+## Contact
 
-## ✨ Feedback & Suggestions
-
-For feedback or security concerns, contact [hello@amalpk.in](mailto:hello@amalpk.in).
-
-## 📜 License
-
-Licensed under the MIT License, Copyright © 2026
-
----
-
-Based on [AstroPaper](https://github.com/satnaing/astro-paper), with the original MIT
-license retained.
+For feedback or security concerns, contact
+[hello@amalpk.in](mailto:hello@amalpk.in).

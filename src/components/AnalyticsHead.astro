@@ -19,10 +19,12 @@ const initialConsent = analytics.consentBanner ? "denied" : "granted";
 
 <script is:inline define:vars={{ initialConsent }}>
   window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    window.dataLayer.push(arguments);
-  }
-  gtag("consent", "default", {
+  window.gtag =
+    window.gtag ||
+    function () {
+      window.dataLayer.push(arguments);
+    };
+  window.gtag("consent", "default", {
     ad_storage: initialConsent,
     ad_user_data: initialConsent,
     ad_personalization: initialConsent,
@@ -31,13 +33,13 @@ const initialConsent = analytics.consentBanner ? "denied" : "granted";
     security_storage: "granted",
     wait_for_update: 500,
   });
-  gtag("set", "url_passthrough", true);
-  gtag("set", "ads_data_redaction", true);
+  window.gtag("set", "url_passthrough", true);
+  window.gtag("set", "ads_data_redaction", true);
 
   // Restore a previous choice so repeat visitors aren't re-prompted.
   try {
     if (localStorage.getItem("consent-mode") === "granted") {
-      gtag("consent", "update", {
+      window.gtag("consent", "update", {
         ad_storage: "granted",
         ad_user_data: "granted",
         ad_personalization: "granted",
@@ -53,8 +55,8 @@ const initialConsent = analytics.consentBanner ? "denied" : "granted";
     ga4Script.async = true;
     ga4Script.src = "https://www.googletagmanager.com/gtag/js?id=" + ga4Id;
     document.head.appendChild(ga4Script);
-    gtag("js", new Date());
-    gtag("config", ga4Id, { send_page_view: false });
+    window.gtag("js", new Date());
+    window.gtag("config", ga4Id, { send_page_view: false });
   }
 </script>
 

@@ -23,6 +23,8 @@ interface SiteConfig {
   dir?: "ltr" | "rtl" | "auto";
   /** Google Search Console verification meta tag value */
   googleVerification?: string;
+  /** Bing Webmaster Tools verification meta tag value */
+  bingVerification?: string;
 }
 
 interface PostsConfig {
@@ -147,7 +149,11 @@ type ResolvedSiteConfig = Required<
 > &
   Pick<
     SiteConfig,
-    "profile" | "googleVerification" | "authorJobTitle" | "authorKnowsAbout"
+    | "profile"
+    | "googleVerification"
+    | "bingVerification"
+    | "authorJobTitle"
+    | "authorKnowsAbout"
   >;
 
 type ResolvedAnalyticsConfig = Required<

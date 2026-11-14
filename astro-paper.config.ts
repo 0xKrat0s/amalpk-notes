@@ -23,6 +23,7 @@ export default defineAstroPaperConfig({
     lang: "en",
     timezone: "Asia/Kolkata",
     dir: "ltr",
+    bingVerification: "125B1382DA7DD691CC2B330A597D5247",
   },
   posts: {
     perPage: 4,
