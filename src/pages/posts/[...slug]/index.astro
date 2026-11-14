@@ -1,12 +1,16 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import PostLayout from "@/layouts/PostLayout.astro";
 import Header from "@/components/Header.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
 import Footer from "@/components/Footer.astro";
 import Datetime from "@/components/Datetime.astro";
 import Tag from "@/components/Tag.astro";
+import RelatedPosts from "@/components/RelatedPosts.astro";
 import { getPostSlug, getPostUrl } from "@/utils/getPostPaths";
 import { getSortedPosts } from "@/utils/getSortedPosts";
+import { normalizeCollection } from "@/utils/getCollections";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
 import EditPost from "./_components/EditPost.astro";
@@ -97,17 +101,62 @@ if (!ogImageUrl && config.features.dynamicOgImage) {
 const ogImage = ogImageUrl
   ? new URL(ogImageUrl, Astro.url.origin).href
   : undefined;
+
+// --- Collection link + related posts -------------------------------------
+const collectionSegments = post.data.collection.split("/").filter(Boolean);
+const collectionName = (collectionSegments.at(-1) ?? post.data.collection)
+  .replace(/-/g, " ")
+  .replace(/^\w/, char => char.toUpperCase());
+const collectionHref = getRelativeLocaleUrl(
+  locale,
+  `directory/collections/${normalizeCollection(post.data.collection)}/`
+);
+
+// Rank other posts by topical proximity: shared tags weigh most, then an
+// identical collection, then the same top-level collection. Ties go to the
+// newer post. Three is deliberate — more turns into a link farm.
+const currentTags = new Set(tags.map(tag => slugifyStr(tag)));
+const currentTopLevel = collectionSegments[0];
+
+const relatedPosts = getSortedPosts(await getCollection("posts"))
+  .filter(({ id, data }) => id !== post.id && !data.draft)
+  .map(candidate => {
+    const candidateTags = candidate.data.tags.map(tag => slugifyStr(tag));
+    const sharedTags = candidateTags.filter(tag => currentTags.has(tag)).length;
+    const sameCollection =
+      normalizeCollection(candidate.data.collection) ===
+      normalizeCollection(post.data.collection);
+    const sameTopLevel =
+      candidate.data.collection.split("/")[0] === currentTopLevel;
+
+    const score =
+      sharedTags * 3 + (sameCollection ? 4 : 0) + (sameTopLevel ? 1 : 0);
+    return { candidate, score };
+  })
+  .filter(({ score }) => score > 0)
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map(({ candidate: { id, data, filePath } }) => ({
+    id,
+    title: data.title,
+    description: data.description,
+    filePath,
+  }));
 ---
 
 <PostLayout
   title={`${title} | ${config.site.title}`}
+  headline={title}
   description={description}
   ogImage={ogImage}
   canonicalURL={canonicalURL}
   pubDatetime={pubDatetime}
   modDatetime={modDatetime}
+  section={post.data.collection}
+  tags={tags}
 >
   <Header />
+  <Breadcrumb currentLabel={title} />
 
   <BackButton />
 
@@ -136,6 +185,21 @@ const ogImage = ogImageUrl
       </span>
       <EditPost {hideEditPost} {post} class="max-sm:hidden" />
     </div>
+
+    <p class="text-muted-foreground my-2 text-sm">
+      Part of{" "}
+      <a
+        href={collectionHref}
+        class="hover:text-accent decoration-dashed underline-offset-4 hover:underline"
+      >
+        {collectionName}
+      </a>
+    </p>
+
+    <p class="text-muted-foreground mt-4 text-sm italic">
+      <span class="text-foreground font-medium not-italic">Summary:</span>{" "}
+      {description}
+    </p>
 
     <div class="post-body mt-8">
       <PostToc headings={tocHeadings} />
@@ -172,6 +236,10 @@ const ogImage = ogImageUrl
 
     <hr class="my-8 border-dashed" />
 
+    <RelatedPosts posts={relatedPosts} />
+
+    <hr class="my-8 border-dashed" />
+
     <AdjacentPostNav {prevPost} {nextPost} />
   </main>
   <Footer />
@@ -179,6 +247,8 @@ const ogImage = ogImageUrl
 
 <script is:inline data-astro-rerun>
   function createProgressBar() {
+    if (document.getElementById("myBar")) return;
+
     const progressContainer = document.createElement("div");
     progressContainer.className =
       "progress-container fixed top-0 z-10 h-1 w-full bg-background";
@@ -193,20 +263,27 @@ const ogImage = ogImageUrl
   createProgressBar();
 
   function updateScrollProgress() {
-    document.addEventListener("scroll", () => {
+    const update = () => {
       const winScroll =
         document.body.scrollTop || document.documentElement.scrollTop;
       const height =
         document.documentElement.scrollHeight -
         document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      if (document) {
-        const myBar = document.getElementById("myBar");
-        if (myBar) {
-          myBar.style.width = scrolled + "%";
-        }
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const myBar = document.getElementById("myBar");
+      if (myBar) {
+        myBar.style.width = scrolled + "%";
       }
-    });
+    };
+
+    if (window.__scrollProgressBound) {
+      update();
+      return;
+    }
+
+    document.addEventListener("scroll", update, { passive: true });
+    window.__scrollProgressBound = true;
+    update();
   }
   updateScrollProgress();
 
@@ -215,6 +292,8 @@ const ogImage = ogImageUrl
       document.querySelectorAll("#article :is(h2, h3, h4, h5, h6)")
     );
     for (const heading of headings) {
+      if (heading.querySelector(".heading-link")) continue;
+
       heading.classList.add("group");
       const link = document.createElement("a");
       link.className =
@@ -235,6 +314,8 @@ const ogImage = ogImageUrl
     const codeBlocks = Array.from(document.querySelectorAll("pre"));
 
     for (const codeBlock of codeBlocks) {
+      if (codeBlock.querySelector(".copy-code")) continue;
+
       const wrapper = document.createElement("div");
       wrapper.style.position = "relative";
 
@@ -265,6 +346,17 @@ const ogImage = ogImageUrl
       const text = code?.innerText;
 
       await navigator.clipboard.writeText(text ?? "");
+
+      // GA4: a copy is one of the strongest "this was useful" signals for a
+      // technical post. Pushed straight to the dataLayer; no dependency on GTM.
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "code_copy",
+          post_path: window.location.pathname,
+          code_language: block.dataset.language || "unknown",
+        });
+      } catch (e) {}
 
       button.innerText = "Copied";
 
@@ -650,7 +742,10 @@ const ogImage = ogImageUrl
     );
   }
 
-  document.addEventListener("astro:after-swap", () =>
-    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
-  );
+  if (!window.__postScrollSwapBound) {
+    window.__postScrollSwapBound = true;
+    document.addEventListener("astro:after-swap", () =>
+      window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+    );
+  }
 </script>

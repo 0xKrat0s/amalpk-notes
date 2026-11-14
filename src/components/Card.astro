@@ -14,18 +14,20 @@ const { title, description, ...props } = data;
 ---
 
 <li class="my-6">
-  <a
-    href={getPostUrl(id, filePath, Astro.currentLocale)}
-    class:list={[
-      "text-accent inline-block text-lg font-medium",
-      "decoration-dashed underline-offset-4 hover:underline",
-      "focus-visible:no-underline focus-visible:underline-offset-0",
-    ]}
-  >
-    <Heading transition:name={toTransitionName(id)}>
-      {title}
-    </Heading>
-  </a>
-  <Datetime {...props} />
+  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+    <a
+      href={getPostUrl(id, filePath, Astro.currentLocale)}
+      class:list={[
+        "text-accent min-w-0 flex-1 text-lg font-medium",
+        "decoration-dashed underline-offset-4 hover:underline",
+        "focus-visible:no-underline focus-visible:underline-offset-0",
+      ]}
+    >
+      <Heading transition:name={toTransitionName(id)}>
+        {title}
+      </Heading>
+    </a>
+    <Datetime {...props} class="shrink-0" />
+  </div>
   <p>{description}</p>
 </li>

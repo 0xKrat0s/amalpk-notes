@@ -1,0 +1,28 @@
+# Cloudflare Pages redirects for notes.amalpk.in
+# Format:  from  to  [status]
+#
+# Safety net: if a legacy Hashnode URL is requested on the NEW host (e.g. an
+# inbound link had its hostname swapped by hand), send it to the real post URL.
+# The authoritative old-host redirects live in Cloudflare Redirect Rules on
+# blog.amalpk.in — see SEO-RESEARCH-REPORT.md §0.4.
+
+/cve-2025-21298                                       /posts/cve-2025-21298/                                       301
+/web-cache-deception                                  /posts/web-cache-deception/                                  301
+/nosql-injection                                      /posts/nosql-injection/                                      301
+/host-header-injection                                /posts/host-header-injection/                                301
+/dependency-confusion                                 /posts/dependency-confusion/                                 301
+/understanding-crlf-injection-and-its-exploitation-b8271d14452a  /posts/understanding-crlf-injection-and-its-exploitation-b8271d14452a/  301
+/unrested-htb                                         /posts/unrested-htb/                                         301
+/cicada-hackthebox-writeup                            /posts/cicada-hackthebox-writeup/                            301
+/caption-hackthebox-writeup                           /posts/caption-hackthebox-writeup/                           301
+/android-burp-proxy-setup                             /posts/android-burp-proxy-setup/                             301
+/hackthebox-fluffy-walkthrough-windows-seasonal-box   /posts/hackthebox-fluffy-walkthrough-windows-seasonal-box/   301
+/introduction-to-android-security                     /posts/introduction-to-android-security/                     301
+
+# Legacy listing pages
+/about/                                              https://amalpk.in/                                           301
+/archive                                              /archives/                                                   301
+/series/own-the-box-htb-series                        /posts/                                                      301
+/tag/*                                                /directory/tags/:splat/                                      301
+/feed.xml                                             /rss.xml                                                     301
+/sitemap.xml                                          /sitemap-index.xml                                           301

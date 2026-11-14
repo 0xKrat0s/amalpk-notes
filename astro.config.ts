@@ -21,14 +21,47 @@ import {
   rehypeInlineToc,
 } from "./src/utils/rehypeInlineToc";
 import config from "./astro-paper.config";
+// @ts-ignore -- plain ESM helper, intentionally untyped (no @types/node dep)
+import { getPostDateMap } from "./scripts/post-dates.mjs";
+
+const postDates = getPostDateMap();
+const siteUrl = config.site.url.replace(/\/+$/, "");
+
+/** Turn a sitemap URL into the post slug it represents, if any. */
+function postSlugFromUrl(url: string) {
+  const path = url.startsWith(siteUrl) ? url.slice(siteUrl.length) : url;
+  const match = path.match(/^\/posts\/([^/]+)\/?$/);
+  return match ? decodeURIComponent(match[1]) : undefined;
+}
 
 export default defineConfig({
   site: config.site.url,
+  trailingSlash: "always",
   integrations: [
     mdx(),
     sitemap({
-      filter: page =>
-        config.features?.showArchives !== false || !/\/archives\/?$/.test(page),
+      filter: page => {
+        const path = page.startsWith(siteUrl)
+          ? page.slice(siteUrl.length)
+          : page;
+        // Search is client-side only and never useful as a result.
+        if (/^\/search\/?$/.test(path)) return false;
+        // Paginated listing pages duplicate page 1 and are noindexed.
+        if (/\/\d+\/?$/.test(path) && /^\/(posts|directory)\//.test(path))
+          return false;
+        if (
+          config.features?.showArchives === false &&
+          /^\/archives\/?$/.test(path)
+        )
+          return false;
+        return true;
+      },
+      serialize: item => {
+        const slug = postSlugFromUrl(item.url);
+        const date = slug ? postDates.get(slug) : undefined;
+        if (date) item.lastmod = date.toISOString();
+        return item;
+      },
     }),
     inlineTocDeprecation(),
   ],

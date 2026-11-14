@@ -7,6 +7,10 @@ interface SiteConfig {
   description: string;
   /** Default post author name */
   author: string;
+  /** Author role/title, used as `Person.jobTitle` in structured data */
+  authorJobTitle?: string;
+  /** Areas of expertise, used as `Person.knowsAbout` in structured data */
+  authorKnowsAbout?: string[];
   /** Author profile URL (used in structured data) */
   profile?: string;
   /** Fallback OG image filename in /public, e.g. "og.jpg" */
@@ -68,6 +72,19 @@ interface FeaturesConfig {
   toc?: boolean;
 }
 
+interface AnalyticsConfig {
+  /**
+   * Google Tag Manager container ID, e.g. "GTM-XXXXXXX".
+   * When omitted, no analytics script, consent banner, or JSON events are emitted.
+   */
+  gtmId?: string;
+  /**
+   * Show the cookie-consent banner and default Consent Mode to "denied".
+   * When false (or omitted), consent defaults to "granted".
+   */
+  consentBanner?: boolean;
+}
+
 interface SocialLink {
   /**
    * Must match an SVG filename in src/assets/icons/socials/.
@@ -103,6 +120,8 @@ interface AstroPaperConfig {
   site: SiteConfig;
   posts?: PostsConfig;
   features?: FeaturesConfig;
+  /** Google Tag Manager / consent banner settings */
+  analytics?: AnalyticsConfig;
   /** Social profile links shown in header/footer */
   socials?: SocialLink[];
   /** Share links shown on post detail pages */
@@ -122,12 +141,21 @@ type ResolvedSiteConfig = Required<
     | "ogImage"
   >
 > &
-  Pick<SiteConfig, "profile" | "googleVerification">;
+  Pick<
+    SiteConfig,
+    "profile" | "googleVerification" | "authorJobTitle" | "authorKnowsAbout"
+  >;
+
+type ResolvedAnalyticsConfig = Required<
+  Pick<AnalyticsConfig, "consentBanner">
+> &
+  Pick<AnalyticsConfig, "gtmId">;
 
 export interface ResolvedAstroPaperConfig {
   site: ResolvedSiteConfig;
   posts: Required<PostsConfig>;
   features: Required<FeaturesConfig>;
+  analytics: ResolvedAnalyticsConfig;
   socials: SocialLink[];
   shareLinks: ShareLink[];
 }

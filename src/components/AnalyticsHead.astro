@@ -1,0 +1,60 @@
+---
+/**
+ * Analytics `<head>` block: Consent Mode v2 defaults + the GTM container.
+ *
+ * Kept in its own component because the inline scripts must render verbatim.
+ * Nesting `<script>` tags inside an Astro conditional expression breaks the
+ * Prettier Astro parser, and this block is easier to audit on its own.
+ *
+ * Render order matters: the consent default must execute before GTM loads.
+ */
+import config from "@/config";
+
+const { analytics } = config;
+
+const gtmId = analytics.gtmId ?? "";
+const initialConsent = analytics.consentBanner ? "denied" : "granted";
+---
+
+<script is:inline define:vars={{ initialConsent }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    window.dataLayer.push(arguments);
+  }
+  gtag("consent", "default", {
+    ad_storage: initialConsent,
+    ad_user_data: initialConsent,
+    ad_personalization: initialConsent,
+    analytics_storage: initialConsent,
+    functionality_storage: "granted",
+    security_storage: "granted",
+    wait_for_update: 500,
+  });
+  gtag("set", "url_passthrough", true);
+  gtag("set", "ads_data_redaction", true);
+
+  // Restore a previous choice so repeat visitors aren't re-prompted.
+  try {
+    if (localStorage.getItem("consent-mode") === "granted") {
+      gtag("consent", "update", {
+        ad_storage: "granted",
+        ad_user_data: "granted",
+        ad_personalization: "granted",
+        analytics_storage: "granted",
+      });
+    }
+  } catch (e) {}
+</script>
+
+<script is:inline define:vars={{ gtmId }}>
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l !== "dataLayer" ? "&l=" + l : "";
+    j.async = true;
+    j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, "script", "dataLayer", gtmId);
+</script>

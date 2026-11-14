@@ -3,6 +3,9 @@ import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
+import ConsentBanner from "@/components/ConsentBanner.astro";
+import AnalyticsHead from "@/components/AnalyticsHead.astro";
+import AnalyticsBody from "@/components/AnalyticsBody.astro";
 import config from "@/config";
 import "@/styles/global.css";
 
@@ -11,19 +14,87 @@ type Props = {
   description?: string;
   ogImage?: string;
   canonicalURL?: string;
+  /** Emit `noindex, follow` for thin or duplicate pages. */
+  noindex?: boolean;
+  /** Open Graph object type. Posts override this with "article". */
+  ogType?: "website" | "article";
+  /** Extra JSON-LD nodes appended to the site-wide `@graph`. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 };
 
-const { site } = config;
+const { site, analytics } = config;
 
 const {
   title = site.title,
   description = site.description,
   ogImage = resolveDefaultOgImagePath(config),
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+  noindex = false,
+  ogType = "website",
+  jsonLd,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
 const rssHref = getAssetPath("rss.xml");
+
+// Dynamically generated OG images are always 1200×630; frontmatter images may
+// be any size, so only claim dimensions for the ones we know.
+const isGeneratedOgImage = /\/(og|index)\.png$/.test(socialImageURL.pathname);
+
+const siteUrl = site.url.replace(/\/+$/, "");
+const websiteId = `${siteUrl}/#website`;
+const authorId = `${siteUrl}/#author`;
+
+const xHandle = config.socials
+  .find(({ name }) => name === "x")
+  ?.url.match(/(?:x|twitter)\.com\/([A-Za-z0-9_]+)/)?.[1];
+
+// Only real profile URLs belong in sameAs — mailto links are not identities.
+const sameAs = config.socials
+  .filter(({ url }) => /^https?:\/\//i.test(url))
+  .map(({ url }) => url);
+
+const extras = (Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []).filter(
+  Boolean
+);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: `${siteUrl}/`,
+      name: site.title,
+      description: site.description,
+      inLanguage: site.lang,
+      publisher: { "@id": authorId },
+    },
+    {
+      "@type": "Person",
+      "@id": authorId,
+      name: site.author,
+      url: site.profile ?? `${siteUrl}/`,
+      ...(site.authorJobTitle && { jobTitle: site.authorJobTitle }),
+      ...(site.authorKnowsAbout?.length && {
+        knowsAbout: site.authorKnowsAbout,
+      }),
+      ...(sameAs.length && { sameAs }),
+    },
+    ...extras,
+  ],
+};
+
+// `JSON.stringify` leaves `<` alone, so a title containing `</script>` would
+// end the ld+json block early. `\u003c` reads back as `<` for JSON parsers.
+const structuredDataJson = JSON.stringify(structuredData).replace(
+  /</g,
+  "\\u003c"
+);
+
+const robotsContent = noindex
+  ? "noindex, follow"
+  : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
 ---
 
 <!doctype html>
@@ -33,67 +104,9 @@ const rssHref = getAssetPath("rss.xml");
   class="overflow-y-scroll scroll-smooth"
 >
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href={getAssetPath("favicon.svg")} />
-    <link rel="icon" href={getAssetPath("favicon.ico")} />
-    <link rel="canonical" href={canonicalURL} />
-    <meta name="generator" content={Astro.generator} />
-
-    <!-- Font -->
-    <Font
-      cssVariable="--font-google-sans-code"
-      preload={[{ subset: "latin", weight: 400, style: "normal" }]}
-    />
-
-    <!-- Primary meta -->
-    <title>{title}</title>
-    <meta name="title" content={title} />
-    <meta name="description" content={description} />
-    <meta name="author" content={site.author} />
-    <link rel="sitemap" href={getAssetPath("sitemap-index.xml")} />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={site.title} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={socialImageURL} />
-
-    <!-- Twitter / X -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={socialImageURL} />
-
-    <!-- RSS autodiscovery -->
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title={site.title}
-      href={new URL(rssHref, Astro.site)}
-    />
-
-    <!-- Filled at runtime by theme.ts to match the current background colour -->
-    <meta name="theme-color" content="" />
-
-    <!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->
-    <slot name="head" />
-
-    {
-      site.googleVerification && (
-        <meta
-          name="google-site-verification"
-          content={site.googleVerification}
-        />
-      )
-    }
-
     <!--
-      Inline FOUC-prevention script: sets data-theme on <html> before
-      the browser paints. Runs synchronously, no defer/async.
+      Inline FOUC-prevention script: sets data-theme before any page content
+      can be painted.
     -->
     <script is:inline>
       (function () {
@@ -110,12 +123,99 @@ const rssHref = getAssetPath("rss.xml");
       })();
     </script>
 
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={getAssetPath("favicon.svg")} />
+    <link rel="icon" href={getAssetPath("favicon.ico")} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content={robotsContent} />
+    {site.profile && <link rel="author" href={site.profile} />}
+
+    <!-- Font -->
+    <Font
+      cssVariable="--font-google-sans-code"
+      preload={[{ subset: "latin", weight: 400, style: "normal" }]}
+    />
+
+    <!-- Primary meta -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="author" content={site.author} />
+    <link rel="sitemap" href={getAssetPath("sitemap-index.xml")} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={socialImageURL} />
+    <meta property="og:image:alt" content={title} />
+    {isGeneratedOgImage && <meta property="og:image:width" content="1200" />}
+    {isGeneratedOgImage && <meta property="og:image:height" content="630" />}
+    <meta property="og:locale" content={site.lang.replace("-", "_")} />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL} />
+    <meta name="twitter:image:alt" content={title} />
+    {xHandle && <meta name="twitter:site" content={`@${xHandle}`} />}
+    {xHandle && <meta name="twitter:creator" content={`@${xHandle}`} />}
+
+    <!-- RSS autodiscovery -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={site.title}
+      href={new URL(rssHref, Astro.site)}
+    />
+
+    <!-- Filled at runtime by theme.ts to match the current background colour -->
+    <meta name="theme-color" content="" />
+
+    <!-- Extra head content injected by child layouts (e.g. article meta) -->
+    <slot name="head" />
+
+    {
+      site.googleVerification && (
+        <meta
+          name="google-site-verification"
+          content={site.googleVerification}
+        />
+      )
+    }
+
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={structuredDataJson}
+    />
+
+    {
+      analytics.gtmId && (
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+      )
+    }
+    {/* Consent Mode v2 defaults must run before GTM loads. */}
+    {analytics.gtmId && <AnalyticsHead />}
+
     <ClientRouter />
   </head>
   <body
     class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
   >
+    {/* GTM noscript fallback + one pageview per ClientRouter navigation. */}
+    {analytics.gtmId && <AnalyticsBody />}
+
     <slot />
+
+    {analytics.gtmId && analytics.consentBanner && <ConsentBanner />}
+
     <script>
       import "@/scripts/theme";
     </script>

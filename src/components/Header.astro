@@ -84,18 +84,19 @@ const isActive = (path: string) => {
         </li>
         <li class="col-span-2">
           <a
-            href={getRelativeLocaleUrl(locale, "tags")}
-            class:list={{ "active-nav": isActive("/tags") }}
+            href={getRelativeLocaleUrl(locale, "directory")}
+            class:list={{ "active-nav": isActive("/directory") }}
           >
-            {t.nav.tags}
+            {t.nav.directory}
           </a>
         </li>
         <li class="col-span-2">
           <a
-            href={getRelativeLocaleUrl(locale, "about")}
-            class:list={{ "active-nav": isActive("/about") }}
+            href="https://amalpk.in"
+            aria-label={`${t.nav.portfolio} (external site)`}
           >
-            {t.nav.about}
+            {t.nav.portfolio}
+            <span aria-hidden="true" class="ms-0.5 text-xs">↗</span>
           </a>
         </li>
         {

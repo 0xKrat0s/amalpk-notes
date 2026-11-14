@@ -1,0 +1,47 @@
+---
+/**
+ * "Related posts" block for the end of an article.
+ *
+ * Ranking is computed in the page (shared tags, same collection, same
+ * top-level collection) so this component stays presentational. The links use
+ * descriptive titles and the post description as surrounding text, which is
+ * what internal linking guidance asks for — no "read more" anchors.
+ */
+import { getPostUrl } from "@/utils/getPostPaths";
+
+type RelatedPost = {
+  id: string;
+  title: string;
+  description: string;
+  filePath?: string;
+};
+
+type Props = {
+  posts: RelatedPost[];
+};
+
+const { posts } = Astro.props;
+---
+
+{
+  posts.length > 0 && (
+    <section aria-labelledby="related-posts-heading" class="mt-8">
+      <h2 id="related-posts-heading" class="text-accent text-lg font-semibold">
+        Related posts
+      </h2>
+      <ul class="mt-3 space-y-4">
+        {posts.map(({ id, title, description, filePath }) => (
+          <li>
+            <a
+              href={getPostUrl(id, filePath, Astro.currentLocale)}
+              class="text-accent font-medium decoration-dashed underline-offset-4 hover:underline focus-visible:underline focus-visible:underline-offset-4"
+            >
+              {title}
+            </a>
+            <p class="text-muted-foreground mt-0.5 text-sm">{description}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

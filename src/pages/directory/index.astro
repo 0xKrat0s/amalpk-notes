@@ -1,0 +1,82 @@
+---
+import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Main from "@/components/Main.astro";
+import Footer from "@/components/Footer.astro";
+import Tag from "@/components/Tag.astro";
+import Collection from "@/components/Collection.astro";
+import { getUniqueTags } from "@/utils/getUniqueTags";
+import { getUniqueCollections } from "@/utils/getCollections";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+const collections = getUniqueCollections(posts);
+const tags = getUniqueTags(posts);
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+---
+
+<Layout title={`${t.pages.directoryTitle} | ${config.site.title}`}>
+  <Header />
+
+  <Main class="pt-6 sm:pt-8">
+    <section aria-labelledby="collections-heading" class="mb-10 pb-10">
+      <nav
+        class="text-muted-foreground mb-3 flex items-center gap-x-1 text-sm font-light"
+        aria-label="Collections"
+      >
+        <a href={getRelativeLocaleUrl(locale, "")} class="opacity-80">
+          {t.nav.home}
+        </a>
+        <span aria-hidden="true" class="opacity-80">&raquo;</span>
+        <a href={getRelativeLocaleUrl(locale, "directory")} class="opacity-80">
+          {t.pages.directoryTitle}
+        </a>
+        <span aria-hidden="true" class="opacity-80">&raquo;</span>
+        <span class="opacity-75">{t.pages.collectionsTitle}</span>
+      </nav>
+      <h2 id="collections-heading" class="mb-2 text-2xl font-semibold">
+        {t.pages.collectionsTitle}
+      </h2>
+      <p class="text-muted-foreground mb-7 italic">
+        {t.pages.collectionsDesc}
+      </p>
+      <ul class="flex flex-col">
+        {
+          collections.map((collection, index) => (
+            <Collection {...collection} isFirst={index === 0} />
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="tags-heading">
+      <nav
+        class="text-muted-foreground mb-3 flex items-center gap-x-1 text-sm font-light"
+        aria-label="Tags"
+      >
+        <a href={getRelativeLocaleUrl(locale, "")} class="opacity-80">
+          {t.nav.home}
+        </a>
+        <span aria-hidden="true" class="opacity-80">&raquo;</span>
+        <a href={getRelativeLocaleUrl(locale, "directory")} class="opacity-80">
+          {t.pages.directoryTitle}
+        </a>
+        <span aria-hidden="true" class="opacity-80">&raquo;</span>
+        <span class="opacity-75">{t.pages.tagsTitle}</span>
+      </nav>
+      <h2 id="tags-heading" class="mb-5 text-2xl font-semibold">
+        {t.pages.tagsTitle}
+      </h2>
+      <ul class="flex flex-wrap gap-3">
+        {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} variant="chip" />)}
+      </ul>
+    </section>
+  </Main>
+
+  <Footer />
+</Layout>

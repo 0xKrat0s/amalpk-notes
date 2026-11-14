@@ -4,8 +4,9 @@ export default {
   nav: {
     home: "Home",
     posts: "Posts",
+    directory: "Directory",
     tags: "Tags",
-    about: "About",
+    portfolio: "Portfolio",
     archives: "Archives",
     search: "Search",
   },
@@ -41,6 +42,13 @@ export default {
   pages: {
     tagTitle: "Tag",
     tagDesc: "All the articles with the tag",
+
+    collectionTitle: "Collection",
+    collectionDesc: "All the articles in the collection",
+    collectionsTitle: "Collections",
+    collectionsDesc: "Browse posts by their primary topic.",
+    directoryTitle: "Directory",
+    directoryDesc: "Browse posts by collection or tag.",
 
     tagsTitle: "Tags",
     tagsDesc: "All the tags used in posts.",
