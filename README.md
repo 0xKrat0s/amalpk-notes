@@ -78,6 +78,7 @@ The development server runs at `http://localhost:4321`.
 | `pnpm format:check` | Check formatting with Prettier |
 | `pnpm seo:validate` | Validate generated SEO output |
 | `pnpm alt:audit` | Check image alt text |
+| `pnpm indexnow` | Submit built site URLs to IndexNow |
 
 ## Content
 
@@ -96,6 +97,19 @@ For a local production check:
 ```bash
 pnpm build
 pnpm preview
+```
+
+After a new post is deployed, submit its URL to IndexNow:
+
+```bash
+pnpm indexnow https://notes.amalpk.in/posts/my-new-post/
+```
+
+To submit every URL in the latest built sitemap:
+
+```bash
+pnpm build
+pnpm indexnow
 ```
 
 ## Attribution and license
