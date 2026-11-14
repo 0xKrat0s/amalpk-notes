@@ -5,7 +5,7 @@ export default defineAstroPaperConfig({
     url: "https://notes.amalpk.in",
     title: "Amal PK",
     description:
-      "Application security notes, penetration-testing writeups, and practical security research.",
+      "A field notebook for application security, vulnerability research, penetration testing, and offensive security.",
     author: "Amal PK",
     authorJobTitle: "Application Security Analyst",
     authorKnowsAbout: [
