@@ -12,7 +12,6 @@ import config from "@/config";
 
 const { analytics } = config;
 
-const ga4Id = analytics.ga4Id ?? "";
 const gtmId = analytics.gtmId ?? "";
 const initialConsent = analytics.consentBanner ? "denied" : "granted";
 ---
@@ -47,17 +46,6 @@ const initialConsent = analytics.consentBanner ? "denied" : "granted";
       });
     }
   } catch (e) {}
-</script>
-
-<script is:inline define:vars={{ ga4Id }}>
-  if (ga4Id) {
-    var ga4Script = document.createElement("script");
-    ga4Script.async = true;
-    ga4Script.src = "https://www.googletagmanager.com/gtag/js?id=" + ga4Id;
-    document.head.appendChild(ga4Script);
-    window.gtag("js", new Date());
-    window.gtag("config", ga4Id, { send_page_view: false });
-  }
 </script>
 
 <script is:inline define:vars={{ gtmId }}>

@@ -201,12 +201,12 @@ const robotsContent = noindex
     />
 
     {
-      (analytics.gtmId || analytics.ga4Id) && (
+      analytics.gtmId && (
         <link rel="preconnect" href="https://www.googletagmanager.com" />
       )
     }
     {/* Consent Mode v2 defaults must run before GTM loads. */}
-    {(analytics.gtmId || analytics.ga4Id) && <AnalyticsHead />}
+    {analytics.gtmId && <AnalyticsHead />}
 
     <ClientRouter />
   </head>
@@ -214,15 +214,11 @@ const robotsContent = noindex
     class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
   >
     {/* GTM noscript fallback + one pageview per ClientRouter navigation. */}
-    {(analytics.gtmId || analytics.ga4Id) && <AnalyticsBody />}
+    {analytics.gtmId && <AnalyticsBody />}
 
     <slot />
 
-    {
-      (analytics.gtmId || analytics.ga4Id) && analytics.consentBanner && (
-        <ConsentBanner />
-      )
-    }
+    {analytics.gtmId && analytics.consentBanner && <ConsentBanner />}
 
     <script>
       import "@/scripts/theme";

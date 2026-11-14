@@ -5,8 +5,7 @@
  *
  * `astro:page-load` fires on the initial load and after every ClientRouter
  * navigation, so pushing one `page_view` there gives exactly one event per
- * navigation. The GTM/GA4 built-in pageview must therefore stay disabled —
- * see the tracker's dashboard checklist.
+ * navigation for the GA4 tag configured in Google Tag Manager.
  */
 import config from "@/config";
 
@@ -33,9 +32,6 @@ const gtmId = analytics.gtmId ?? "";
         page_path: window.location.pathname + window.location.search,
         page_title: document.title,
       };
-      if (typeof window.gtag === "function") {
-        window.gtag("event", "page_view", pageview);
-      }
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: "page_view", ...pageview });
     });

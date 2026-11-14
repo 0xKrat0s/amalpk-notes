@@ -76,10 +76,6 @@ interface FeaturesConfig {
 
 interface AnalyticsConfig {
   /**
-   * Google Analytics 4 measurement ID, e.g. "G-XXXXXXXXXX".
-   */
-  ga4Id?: string;
-  /**
    * Google Tag Manager container ID, e.g. "GTM-XXXXXXX".
    * When omitted, no analytics script, consent banner, or JSON events are emitted.
    */
@@ -159,7 +155,7 @@ type ResolvedSiteConfig = Required<
 type ResolvedAnalyticsConfig = Required<
   Pick<AnalyticsConfig, "consentBanner">
 > &
-  Pick<AnalyticsConfig, "ga4Id" | "gtmId">;
+  Pick<AnalyticsConfig, "gtmId">;
 
 export interface ResolvedAstroPaperConfig {
   site: ResolvedSiteConfig;

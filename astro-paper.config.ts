@@ -41,7 +41,6 @@ export default defineAstroPaperConfig({
     toc: true,
   },
   analytics: {
-    ga4Id: "G-FTR1KLKNMX",
     gtmId: "GTM-5W2CRZVD",
     consentBanner: true,
   },
