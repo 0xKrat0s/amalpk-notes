@@ -75,7 +75,7 @@ Pulled from `https://amalpk.in`:
 
 - [x] Consent Mode v2 default-deny, before GTM
 - [x] Restore saved consent without re-prompting
-- [x] GTM container `GTM-NM9H7KF4` (head + noscript)
+- [x] GTM container `GTM-5W2CRZVD` (head + noscript)
 - [x] `astro:page-load` pageview for `ClientRouter` (no double counting)
 - [x] Consent banner component (accept/decline → `gtag consent update`)
 - [x] `code_copy` event on the existing copy button
@@ -238,7 +238,7 @@ curl -sI https://blog.amalpk.in/cve-2025-21298 | grep -iE '^(HTTP|location)'
   the old→new hops and portfolio→blog clicks log as referral traffic).
 - Check **Enhanced measurement** is on (page views are sent manually — see GTM below).
 
-### 5. GTM (`GTM-NM9H7KF4`)
+### 5. GTM (`GTM-5W2CRZVD`) and GA4 (`G-FTR1KLKNMX`)
 
 - The GA4 config tag's **"Send a page view event when this configuration loads"**
   must be **off** — `Layout.astro` pushes a `page_view` on every `astro:page-load`,

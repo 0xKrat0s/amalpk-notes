@@ -28,13 +28,16 @@ const gtmId = analytics.gtmId ?? "";
     if (window.__pageviewBound) return;
     window.__pageviewBound = true;
     document.addEventListener("astro:page-load", function () {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "page_view",
+      var pageview = {
         page_location: window.location.href,
         page_path: window.location.pathname + window.location.search,
         page_title: document.title,
-      });
+      };
+      if (typeof gtag === "function") {
+        gtag("event", "page_view", pageview);
+      }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: "page_view", ...pageview });
     });
   })();
 </script>

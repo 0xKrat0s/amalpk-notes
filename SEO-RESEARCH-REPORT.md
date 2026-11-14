@@ -216,7 +216,7 @@ Additional Google site-move requirements that apply here (from the primary doc):
 
 ## 0.6 GTM & GA4 — reuse or recreate?
 
-> **Status (confirmed by the owner):** the blog has its **own dedicated GA4 property** (`blog.amalpk.in` data stream, measurement ID `G-FTR1KLKNMX`) and its **own GTM container** (`GTM-NM9H7KF4`) created for that web property. Nothing has been migrated yet — the blog is still live on Hashnode.
+> **Status (confirmed by the owner):** the blog has its **own dedicated GA4 property** (`blog.amalpk.in` data stream, measurement ID `G-FTR1KLKNMX`) and its **own GTM container** (`GTM-5W2CRZVD`) created for that web property. The site now uses the new canonical host.
 
 **Reuse both. Do not create a new property or a new container.** Creating new ones would:
 - split your history into two properties with no way to merge them,
@@ -519,7 +519,7 @@ Three pieces go into `src/layouts/Layout.astro`, in this exact order. **Consent 
     j.async = true;
     j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
     f.parentNode.insertBefore(j, f);
-  })(window, document, "script", "dataLayer", "GTM-NM9H7KF4");
+  })(window, document, "script", "dataLayer", "GTM-5W2CRZVD");
 </script>
 ```
 
@@ -527,7 +527,7 @@ Three pieces go into `src/layouts/Layout.astro`, in this exact order. **Consent 
 <!-- Layout.astro <body>, immediately after the opening <body> tag -->
 <noscript>
   <iframe
-    src="https://www.googletagmanager.com/ns.html?id=GTM-NM9H7KF4"
+    src="https://www.googletagmanager.com/ns.html?id=GTM-5W2CRZVD"
     height="0"
     width="0"
     style="display:none;visibility:hidden"

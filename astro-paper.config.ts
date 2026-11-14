@@ -40,7 +40,8 @@ export default defineAstroPaperConfig({
     toc: true,
   },
   analytics: {
-    gtmId: "GTM-NM9H7KF4",
+    ga4Id: "G-FTR1KLKNMX",
+    gtmId: "GTM-5W2CRZVD",
     consentBanner: true,
   },
   socials: [
