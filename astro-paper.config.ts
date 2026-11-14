@@ -3,7 +3,7 @@ import { defineAstroPaperConfig } from "./src/types/config";
 export default defineAstroPaperConfig({
   site: {
     url: "https://notes.amalpk.in",
-    title: "Amal PK",
+    title: "Notes by Amal PK",
     description:
       "A field notebook for application security, vulnerability research, penetration testing, and offensive security.",
     author: "Amal PK",
