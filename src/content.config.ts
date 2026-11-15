@@ -5,6 +5,20 @@ import config from "@/config";
 
 export const BLOG_PATH = "src/content/posts";
 
+/**
+ * Root-relative (`/images/...`) and absolute (`https://...`) values point at
+ * files outside the content collection — typically `public/` — so they have to
+ * stay plain strings. Only genuinely relative paths (`./cover.png`) belong to
+ * Astro's image pipeline, which would otherwise claim `/images/...` and fail
+ * the build with ImageNotFound.
+ */
+const externalOgImage = z
+  .string()
+  .refine(value => value.startsWith("/") || /^https?:\/\//i.test(value), {
+    message:
+      "ogImage must be a root-relative path (/images/...) or an absolute URL",
+  });
+
 const posts = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: `./${BLOG_PATH}` }),
   schema: ({ image }) =>
@@ -17,7 +31,7 @@ const posts = defineCollection({
       draft: z.boolean().optional(),
       collection: z.string().min(1),
       tags: z.array(z.string()).default(["others"]),
-      ogImage: image().or(z.string()).optional(),
+      ogImage: z.union([externalOgImage, image()]).optional(),
       description: z.string(),
       canonicalURL: z.string().optional(),
       hideEditPost: z.boolean().optional(),

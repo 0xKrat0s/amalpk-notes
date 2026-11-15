@@ -13,6 +13,7 @@ tags:
   - "pentesting"
 description: "Step-by-step HackTheBox Fluffy walkthrough covering SMB enumeration, File Explorer NTLM capture, BloodHound mapping, ADCS shadow-credential abuse, and domain administrator escalation."
 collection: hack-the-box/windows
+ogImage: "/images/posts/hackthebox-fluffy-walkthrough-windows-seasonal-box/image-1.webp"
 ---
 
 ![Hack The Box Fluffy Windows machine write-up cover image](/images/posts/hackthebox-fluffy-walkthrough-windows-seasonal-box/image-1.webp)
