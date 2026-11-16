@@ -38,7 +38,7 @@ The portfolio is available at **https://amalpk.in**.
 ├── public/
 │   ├── images/posts/       # Images used by blog posts
 │   ├── favicon.ico
-│   └── default-og.jpg
+│   └── favicon.svg
 ├── src/
 │   ├── components/
 │   ├── content/posts/      # Markdown and MDX blog posts
