@@ -1,9 +1,10 @@
 import type { APIRoute } from "astro";
+import { experimental_getFontFileURL, fontData } from "astro:assets";
 import satori from "satori";
 import sharp from "sharp";
-import { fontData, experimental_getFontFileURL } from "astro:assets";
-import { getFontPathByWeight } from "@/utils/getFontPathByWeight";
 import config from "@/config";
+import { getFontPathByWeight } from "@/utils/getFontPathByWeight";
+import { getOgBrandImageDataUri } from "@/utils/getOgBrandImageDataUri";
 
 export const GET: APIRoute = async context => {
   const fonts = fontData["--font-google-sans-code"];
@@ -14,27 +15,30 @@ export const GET: APIRoute = async context => {
     throw new Error("Cannot find the font path.");
   }
 
-  const [regularData, boldData] = await Promise.all([
+  const [regularData, boldData, clover] = await Promise.all([
     fetch(experimental_getFontFileURL(regularFontPath, context.url)).then(res =>
       res.arrayBuffer()
     ),
     fetch(experimental_getFontFileURL(boldFontPath, context.url)).then(res =>
       res.arrayBuffer()
     ),
+    getOgBrandImageDataUri(),
   ]);
 
   const svg = await satori(
     {
-      key: null,
       type: "div",
       props: {
         style: {
-          background: "#fefbfb",
+          background: "#17181e",
+          color: "#f7f4fb",
           width: "100%",
           height: "100%",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: "72px 84px",
+          boxSizing: "border-box",
           fontFamily: "Google Sans Code",
         },
         children: [
@@ -42,107 +46,95 @@ export const GET: APIRoute = async context => {
             type: "div",
             props: {
               style: {
-                position: "absolute",
-                top: "-1px",
-                right: "-1px",
-                boxSizing: "border-box",
-                border: "4px solid #000",
-                background: "#ecebeb",
-                opacity: "0.9",
-                borderRadius: "4px",
                 display: "flex",
-                justifyContent: "center",
-                margin: "2.5rem",
-                width: "88%",
-                height: "80%",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
               },
+              children: [
+                {
+                  type: "span",
+                  props: {
+                    style: {
+                      color: "#b9a5d4",
+                      fontSize: 25,
+                      fontWeight: "bold",
+                      letterSpacing: "0.12em",
+                    },
+                    children: "SECURITY RESEARCH NOTES",
+                  },
+                },
+                {
+                  type: "img",
+                  props: {
+                    src: clover,
+                    width: 92,
+                    height: 92,
+                    style: { objectFit: "contain" },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            type: "div",
+            props: {
+              style: { display: "flex", flexDirection: "column", width: "88%" },
+              children: [
+                {
+                  type: "h1",
+                  props: {
+                    style: {
+                      fontSize: 76,
+                      lineHeight: 1.05,
+                      margin: 0,
+                      letterSpacing: "-0.04em",
+                    },
+                    children: config.site.title,
+                  },
+                },
+                {
+                  type: "p",
+                  props: {
+                    style: {
+                      color: "#d7d1df",
+                      fontSize: 30,
+                      lineHeight: 1.4,
+                      margin: "30px 0 0",
+                    },
+                    children: config.site.description,
+                  },
+                },
+              ],
             },
           },
           {
             type: "div",
             props: {
               style: {
-                position: "relative",
-                boxSizing: "border-box",
-                border: "4px solid #000",
-                background: "#fefbfb",
-                borderRadius: "4px",
                 display: "flex",
-                justifyContent: "center",
-                margin: "2rem",
-                width: "88%",
-                height: "80%",
+                justifyContent: "space-between",
+                alignItems: "center",
+                columnGap: "32px",
+                borderTop: "2px solid #75618d",
+                paddingTop: "24px",
+                fontSize: 21,
               },
-              children: {
-                type: "div",
-                props: {
-                  style: {
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    margin: "20px",
-                    width: "90%",
-                    height: "90%",
+              children: [
+                {
+                  type: "span",
+                  props: {
+                    children: "Independent application-security research",
                   },
-                  children: [
-                    {
-                      type: "div",
-                      props: {
-                        style: {
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          height: "90%",
-                          maxHeight: "90%",
-                          overflow: "hidden",
-                          textAlign: "center",
-                        },
-                        children: [
-                          {
-                            type: "p",
-                            props: {
-                              style: {
-                                fontSize: 72,
-                                fontWeight: "bold",
-                                margin: "0 0 31px",
-                                width: "100%",
-                              },
-                              children: config.site.title,
-                            },
-                          },
-                          {
-                            type: "p",
-                            props: {
-                              style: { fontSize: 28, margin: 0, width: "100%" },
-                              children: config.site.description,
-                            },
-                          },
-                        ],
-                      },
-                    },
-                    {
-                      type: "div",
-                      props: {
-                        style: {
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          width: "100%",
-                          marginBottom: "8px",
-                          fontSize: 28,
-                        },
-                        children: {
-                          type: "span",
-                          props: {
-                            style: { overflow: "hidden", fontWeight: "bold" },
-                            children: new URL(config.site.url).hostname,
-                          },
-                        },
-                      },
-                    },
-                  ],
                 },
-              },
+                {
+                  type: "span",
+                  props: {
+                    style: { marginLeft: "auto" },
+                    children: new URL(config.site.url).hostname,
+                  },
+                },
+              ],
             },
           },
         ],
@@ -170,7 +162,6 @@ export const GET: APIRoute = async context => {
   );
 
   const pngBuffer = await sharp(Buffer.from(svg)).png().toBuffer();
-
   return new Response(new Uint8Array(pngBuffer), {
     headers: { "Content-Type": "image/png" },
   });

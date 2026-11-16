@@ -19,7 +19,8 @@ export default defineAstroPaperConfig({
       "Burp Suite",
     ],
     profile: "https://amalpk.in",
-    ogImage: "default-og.jpg",
+    // `og.png` is generated from src/pages/og.png.ts; no stock static image.
+    ogImage: "og.png",
     lang: "en",
     timezone: "Asia/Kolkata",
     dir: "ltr",
