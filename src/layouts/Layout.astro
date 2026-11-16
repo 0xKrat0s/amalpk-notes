@@ -125,7 +125,25 @@ const robotsContent = noindex
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href={getAssetPath("favicon.ico")} />
+    <link
+      rel="icon"
+      href={getAssetPath("favicon.svg")}
+      type="image/svg+xml"
+      sizes="any"
+    />
+    <link
+      rel="icon"
+      href={getAssetPath("favicon-48x48.png")}
+      type="image/png"
+      sizes="48x48"
+    />
+    <link rel="shortcut icon" href={getAssetPath("favicon.ico")} />
+    <link
+      rel="apple-touch-icon"
+      href={getAssetPath("apple-touch-icon.png")}
+      sizes="180x180"
+    />
+    <link rel="manifest" href={getAssetPath("site.webmanifest")} />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
     <meta name="robots" content={robotsContent} />
