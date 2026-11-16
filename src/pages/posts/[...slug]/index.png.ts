@@ -50,6 +50,11 @@ export const GET: APIRoute = async ({ props, url }) => {
       ? `${props.data.description.slice(0, 137).trimEnd()}…`
       : props.data.description;
 
+  // Keep long titles inside the card: shrink the font as the title grows.
+  const titleLength = props.data.title.length;
+  const titleSize =
+    titleLength > 90 ? 44 : titleLength > 60 ? 52 : titleLength > 35 ? 64 : 72;
+
   const svg = await satori(
     {
       key: null,
@@ -126,9 +131,10 @@ export const GET: APIRoute = async ({ props, url }) => {
                             type: "p",
                             props: {
                               style: {
-                                fontSize: 72,
+                                fontSize: titleSize,
                                 fontWeight: "bold",
                                 margin: "17px 0 0",
+                                lineHeight: 1.15,
                               },
                               children: props.data.title,
                             },
