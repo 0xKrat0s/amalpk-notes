@@ -125,6 +125,18 @@ const robotsContent = noindex
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- SVG first: capable browsers prefer it and stop scanning. -->
+    <link
+      rel="icon"
+      href={getAssetPath("favicon.svg")}
+      type="image/svg+xml"
+    />
+    <!-- Monochrome silhouette for Safari pinned tabs. -->
+    <link
+      rel="mask-icon"
+      href={getAssetPath("favicon-clover.svg")}
+      color="#1d1e25"
+    />
     <link
       rel="icon"
       href={getAssetPath("favicon-16x16.png")}
