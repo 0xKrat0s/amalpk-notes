@@ -3,9 +3,9 @@ import { defineAstroPaperConfig } from "./src/types/config";
 export default defineAstroPaperConfig({
   site: {
     url: "https://notes.amalpk.in",
-    title: "Notes by Amal PK",
+    title: "Notes by Amal PK - Cybersecurity & Pentesting Blogs",
     description:
-      "A field notebook for application security, vulnerability research, penetration testing, and offensive security.",
+      "Cybersecurity blog by Amal PK — practical notes on ethical hacking, penetration testing, bug bounty, CTF writeups, and application security.",
     author: "Amal PK",
     authorJobTitle: "Application Security Analyst",
     authorKnowsAbout: [
