@@ -11,7 +11,6 @@ const AI_SEARCH_CRAWLERS = [
   "Claude-SearchBot",
   "bingbot",
   "DuckDuckBot",
-  "Bravebot",
 ];
 
 const DISALLOW: string[] = [];
