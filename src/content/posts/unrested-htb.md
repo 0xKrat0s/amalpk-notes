@@ -8,15 +8,14 @@ tags:
   - "linux"
   - "cybersecurity"
   - "hacking"
-description: "Unrested is a medium difficulty Linux machine on Hackthebox (HTB) platform hosting a version of Zabbix"
+description: "Unrested is a medium-difficulty Linux HackTheBox machine hosting a Zabbix instance. Full walkthrough from initial foothold to privilege escalation and root."
 collection: hack-the-box/linux
 ---
 
 ![Hack The Box Unrested Linux machine write-up cover image](/images/posts/unrested-htb/image-1.png)
 
-# Unrested HTB Writeup
 
-### **About Unrested**
+## **About Unrested**
 
 Unrested is a medium difficulty `Linux` machine hosting a version of `Zabbix`. Enumerating the version of `Zabbix` shows that it is vulnerable to both [CVE-2024-36467](https://nvd.nist.gov/vuln/detail/CVE-2024-36467) (missing access controls on the `user.update` function within the `CUser` class) and [CVE-2024-42327](https://nvd.nist.gov/vuln/detail/CVE-2024-42327) (SQL injection in `user.get` function in `CUser` class) which is leveraged to gain user access on the target. Post-exploitation enumeration reveals that the system has a `sudo` misconfiguration allowing the `zabbix` user to execute `sudo /usr/bin/nmap`, an optional dependency in `Zabbix` servers that is leveraged to gain `root` access.
 

@@ -11,14 +11,13 @@ tags:
   - "bloodhound"
   - "privilege escalation"
   - "pentesting"
-description: "Step-by-step HackTheBox Fluffy walkthrough covering SMB enumeration, File Explorer NTLM capture, BloodHound mapping, ADCS shadow-credential abuse, and domain administrator escalation."
+description: "Fluffy HTB walkthrough: enumerate SMB shares, capture NTLM creds via File Explorer, map BloodHound paths, abuse ADCS shadow credentials, and escalate to DA."
 collection: hack-the-box/windows
 ogImage: "/images/posts/hackthebox-fluffy-walkthrough-windows-seasonal-box/image-1.webp"
 ---
 
 ![Hack The Box Fluffy Windows machine write-up cover image](/images/posts/hackthebox-fluffy-walkthrough-windows-seasonal-box/image-1.webp)
 
-# Hackthebox Fluffy Walkthrough — Windows Seasonal Box
 
 > **Fluffy** is a realistic Windows Active Directory (AD) machine on Hack The Box's Seasonal track that simulates a corporate environment with common misconfigurations and vulnerabilities often seen in real-world internal networks. The box begins with valid user credentials, requiring enumeration of SMB shares to discover internal documentation referencing unpatched CVEs. From there, attackers exploit a **File Explorer spoofing vulnerability** to capture NTLM hashes, perform **BloodHound-based enumeration**, abuse **Active Directory Certificate Services (ADCS)** via **shadow credentials**, and escalate to **domain administrator** through **certificate impersonation**. Fluffy is an excellent box for understanding modern AD escalation techniques and certificate abuse.
 
@@ -28,7 +27,7 @@ ogImage: "/images/posts/hackthebox-fluffy-walkthrough-windows-seasonal-box/image
 
 %%[buymeacoffee]
 
-### Enumerate SMB Shares
+## Enumerate SMB Shares
 
 ```xml
 smbclient -L //10.129.248.64 -U j.fleischman                                                         1 ✘  04:41:44

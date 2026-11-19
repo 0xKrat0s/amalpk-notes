@@ -15,13 +15,12 @@ collection: application-security/web-security
 
 ![Web cache deception attack serving a private resource from a cacheable path](/images/posts/web-cache-deception/image-1.png)
 
-# Web Cache Deception: Understanding and Mitigating Security Risks
 
 Web caching is a technique used to store copies of web pages, images, and other resources to improve performance and reduce server load. When a user requests a cached resource, the cache serves the stored version instead of fetching it from the server. Caching is implemented at various levels, including browsers, Content Delivery Networks (CDNs), and proxy servers.
 
 A well-configured cache enhances website speed, reduces bandwidth consumption, and minimizes latency. However, misconfigurations can introduce security vulnerabilities, such as **Web Cache Deception (WCD)** and **Cache Poisoning**.
 
-### Web Cache Deception: A Dangerous Attack
+## Web Cache Deception: A Dangerous Attack
 
 Web Cache Deception is a technique that attackers use to manipulate caching systems and mislead users or web applications into serving unintended content. This attack involves crafting malicious requests to exploit vulnerabilities in caching mechanisms, leading to the caching of sensitive data associated with other users through legitimate URLs.
 

@@ -15,11 +15,10 @@ collection: hack-the-box/linux
 
 ![Hack The Box Caption Linux machine write-up cover image](/images/posts/caption-hackthebox-writeup/image-1.webp)
 
-# Caption HackTheBox Writeup
 
 > Caption is a Hard-difficulty Linux box, showcasing the chaining of niche vulnerabilities arising from different technologies such as HAProxy and Varnish. It begins with default credentials granting access to GitBucket, which exposes credentials for a web portal login through commits. The application caches a frequently visited page by an admin user, whose session can be hijacked by exploiting Web Cache Deception (WCD) via response poisoning exploited through a Cross-Site Scripting (XSS) payload. HAProxy controls can be bypassed by establishing an HTTP/2 cleartext tunnel, also known as an H2C Smuggling Attack, enabling the exploitation of a locally running service vulnerable to path traversal (\[CVE-2023-37474\]([https://security.snyk.io/vuln/SNYK-PYTHON-COPYPARTY-5777718](https://security.snyk.io/vuln/SNYK-PYTHON-COPYPARTY-5777718))). A foothold is gained by reading the SSH ECDSA private key. Root privileges are obtained by exploiting a command injection vulnerability in the Apache Thrift service running as root.
 
-### **Machine Info:**
+## **Machine Info:**
 
 > _**IP:**_ `10.10.11.33`  
 > **Difficulty**: Hard  

@@ -17,7 +17,6 @@ collection: application-security/supply-chain-security
 
 ![Dependency confusion attack against a package registry](/images/posts/dependency-confusion/image-1.webp)
 
-# Dependency Confusion
 
 > We use **dependencies** in our code like we use electricity in our homes—quietly, constantly, and without thinking twice.
 >

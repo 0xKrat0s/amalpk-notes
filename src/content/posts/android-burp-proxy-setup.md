@@ -8,13 +8,12 @@ tags:
   - "burp suite"
   - "mobile security"
   - "penetration testing"
-description: "Configure Burp Suite proxy on rooted Android with Magisk&#x27;s AlwaysTrustUserCerts. Includes certificate conversion (DER→PEM) and install."
+description: "Configure Burp Suite proxy on rooted Android with Magisk's AlwaysTrustUserCerts. Includes certificate conversion (DER→PEM) and install."
 collection: android/burp-suite-setup
 ---
 
 ![Burp Suite proxy setup for intercepting traffic from a rooted Android device](/images/posts/android-burp-proxy-setup/image-1.png)
 
-# How to Set Up Burp Suite Proxy on Rooted Android with AlwaysTrustUserCerts (Magisk)
 
 Setting up Burp Suite with Android devices or emulators can be annoying, especially on newer Android versions where user-installed certificates are not trusted by many apps by default.
 

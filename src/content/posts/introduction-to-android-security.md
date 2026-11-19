@@ -8,7 +8,7 @@ tags:
   - "android"
   - "android security"
   - "mobile security"
-description: "Explore how Android security really works under the hood."
+description: "How Android security works under the hood: the security architecture, app sandbox, IPC/Binder permissions, SELinux, and system-level protections."
 collection: android/android-security
 ---
 

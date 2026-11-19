@@ -13,7 +13,6 @@ collection: application-security/web-security
 
 ![Host header injection attack illustrating a manipulated HTTP Host value](/images/posts/host-header-injection/image-1.webp)
 
-# Host Header: Small Change, Big Risk
 
 > Host Header Injection vulnerabilities can lead to password reset link hijacking, phishing, open redirects, cache poisoning, and more. In this post, we’ll focus on how insecure usage of the Host header can allow attackers to manipulate password reset links — a simple but critical attack vector that’s often overlooked.1
 

@@ -16,7 +16,6 @@ collection: application-security/web-security
 
 ![NoSQL injection attack against a database query](/images/posts/nosql-injection/image-1.jpeg)
 
-# NoSQL injection
 
 ## What is NoSQL databases?
 
@@ -24,7 +23,7 @@ NoSQL databases store and retrieve data in a format other than traditional SQL r
 
 Like SQL databases, users interact with data in NoSQL databases using queries that are passed by the application to the database. However, different NoSQL databases use a wide range of query languages instead of a universal standard like SQL (Structured Query Language). This may be a custom query language or a common language like XML or JSON.
 
-#### A few examples of NoSQL databases include:
+### A few examples of NoSQL databases include:
 
 1. MongoDB, a popular open-source NoSQL database supported
 

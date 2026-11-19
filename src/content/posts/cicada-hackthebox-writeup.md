@@ -14,11 +14,10 @@ collection: hack-the-box/windows
 
 ![Hack The Box Cicada Windows machine write-up cover image](/images/posts/cicada-hackthebox-writeup/image-1.webp)
 
-# Cicada HackTheBox Writeup
 
 > Cicada is an easy-difficult Windows machine that focuses on beginner Active Directory enumeration and exploitation. In this machine, players will enumerate the domain, identify users, navigate shares, uncover plaintext passwords stored in files, execute a password spray, and use the `SeBackupPrivilege` to achieve full system compromise.
 
-### Machine Info:
+## Machine Info:
 
 > **IP**: `10.129.200.210`  
 > **Difficulty**: Medium  
