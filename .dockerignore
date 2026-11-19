@@ -6,3 +6,6 @@ node_modules/
 
 # Ignore build output
 dist/
+
+# Stale local pagefind index must not get baked in
+/public/pagefind

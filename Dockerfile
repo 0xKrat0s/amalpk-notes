@@ -1,14 +1,18 @@
 # Base stage for building the static files
-FROM node:lts AS base
+FROM node:24-slim AS base
 WORKDIR /app
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Corepack shims need root; pnpm itself is prepared as the non-root user
+# (pinned to match compose.yaml / CI)
+RUN corepack enable
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+USER node
+RUN corepack prepare pnpm@11.3.0 --activate
 
-COPY package.json pnpm-lock.yaml ./
+COPY --chown=node:node package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-COPY . .
+COPY --chown=node:node . .
 RUN pnpm run build
 
 # Runtime stage for serving the application
