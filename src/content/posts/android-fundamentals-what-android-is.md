@@ -13,7 +13,7 @@ tags:
   - "MASTG"
 description: "Android is three products (AOSP, GMS, OEM) on five stack layers. How API levels, SPL strings, Mainline modules and Binder decide whether a device is vulnerable."
 collection: android/android-fundamentals
-ogImage: "/images/posts/android-fundamentals-what-android-is/android_software_stack.webp"
+ogImage: "/images/posts/android-fundamentals-what-android-is/android-fundamentals-blueprint.png"
 ---
  
 _Part 1 of the series **Android Fundamentals for Security Testers**. A condensed overview of the security model lives in [Introduction to Android Security](/posts/introduction-to-android-security/); this series goes deeper, one part at a time._
