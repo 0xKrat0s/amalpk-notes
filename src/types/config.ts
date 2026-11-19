@@ -152,6 +152,7 @@ type ResolvedSiteConfig = Required<
     | "bingVerification"
     | "authorJobTitle"
     | "authorKnowsAbout"
+    | "brand"
   >;
 
 type ResolvedAnalyticsConfig = Required<
