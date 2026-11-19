@@ -8,7 +8,7 @@
  *
  * Usage: npm run seo:validate
  */
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 
 const SITE = "https://notes.amalpk.in";
 const failures = [];
@@ -96,6 +96,19 @@ if (existsSync("dist/sitemap-0.xml")) {
   failures.push("sitemap: dist/sitemap-0.xml missing");
 }
 
+// IndexNow key file: auto-detected from public/<32-hex>.txt (same pattern as
+// scripts/indexnow.mjs), copied into dist/ by the build.
+const keyFile = readdirSync("public").find(name =>
+  /^[a-f0-9]{32}\.txt$/i.test(name)
+);
+
+if (keyFile) {
+  const keyPath = `dist/${keyFile}`;
+  check(existsSync(keyPath), `missing ${keyPath}`);
+} else {
+  failures.push("no IndexNow key file found in public/ (expected <32-hex>.txt)");
+}
+
 // hosting files
 for (const file of [
   "dist/_headers",
@@ -104,19 +117,20 @@ for (const file of [
   "dist/llms.txt",
   "dist/rss.xml",
   "dist/.well-known/security.txt",
-  "dist/43761e1fb96ba1b61b81edb8a0dde5d9.txt",
 ]) {
   check(existsSync(file), `missing ${file}`);
 }
 
 // IndexNow key file must contain only the key
-const keyFile = "dist/43761e1fb96ba1b61b81edb8a0dde5d9.txt";
-if (existsSync(keyFile)) {
-  const content = readFileSync(keyFile, "utf8").trim();
-  check(
-    content === "43761e1fb96ba1b61b81edb8a0dde5d9",
-    "IndexNow key file must contain only the key"
-  );
+if (keyFile) {
+  const keyPath = `dist/${keyFile}`;
+  if (existsSync(keyPath)) {
+    const content = readFileSync(keyPath, "utf8").trim();
+    check(
+      content === keyFile.replace(/\.txt$/, ""),
+      "IndexNow key file must contain only the key"
+    );
+  }
 }
 
 notes.forEach(note => console.log(`  ${note}`));

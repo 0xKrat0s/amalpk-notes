@@ -24,11 +24,25 @@ if (!keyFile) {
 }
 const key = keyFile.replace(/\.txt$/, "");
 
+const XML_ENTITIES = {
+  "&amp;": "&",
+  "&lt;": "<",
+  "&gt;": ">",
+  "&quot;": '"',
+  "&apos;": "'",
+  "&#39;": "'",
+};
+
+function unescapeXml(value) {
+  return value.replace(/&(?:amp|lt|gt|quot|apos|#39);/g, entity => XML_ENTITIES[entity]);
+}
+
 function urlsFromBuild() {
   try {
     const xml = readFileSync(join(process.cwd(), "dist", "sitemap-0.xml"), "utf8");
     return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
       .map(match => match[1])
+      .map(unescapeXml)
       .filter(url => url.startsWith(HOST));
   } catch {
     return [];
@@ -53,5 +67,11 @@ const response = await fetch("https://api.indexnow.org/indexnow", {
     urlList,
   }),
 });
+
+if (!response.ok) {
+  const body = (await response.text()).slice(0, 300);
+  console.error(`IndexNow submission failed: ${response.status} ${response.statusText}${body ? ` — ${body}` : ""}`);
+  process.exit(1);
+}
 
 console.log(`IndexNow: ${response.status} ${response.statusText} (${urlList.length} URLs)`);
