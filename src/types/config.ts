@@ -3,6 +3,8 @@ interface SiteConfig {
   url: string;
   /** Blog title shown in header and meta tags */
   title: string;
+  /** Human-facing brand name shown in the header logo; falls back to `title` when unset */
+  brand?: string;
   /** Short description used in SEO meta and RSS feed */
   description: string;
   /** Default post author name */

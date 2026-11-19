@@ -4,6 +4,7 @@ export default defineAstroPaperConfig({
   site: {
     url: "https://notes.amalpk.in",
     title: "Notes by Amal PK - Cybersecurity & Pentesting Blogs",
+    brand: "Trace Logs",
     description:
       "Cybersecurity blog by Amal PK — practical notes on ethical hacking, penetration testing, bug bounty, CTF writeups, and application security.",
     author: "Amal PK",
