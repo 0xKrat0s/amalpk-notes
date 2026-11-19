@@ -16,6 +16,7 @@ import {
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeTableWrapper } from "./src/utils/rehypeTableWrapper";
+import { rehypeImageSize } from "./src/utils/rehypeImageSize";
 import {
   inlineTocDeprecation,
   rehypeInlineToc,
@@ -82,6 +83,7 @@ export default defineConfig({
         rehypeInlineToc,
         rehypeCallouts,
         rehypeTableWrapper,
+        rehypeImageSize,
       ],
     }),
     shikiConfig: {

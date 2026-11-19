@@ -127,6 +127,13 @@
     @apply bg-(--shiki-dark-bg) text-(--shiki-dark) [&_span]:text-(--shiki-dark);
   }
 
+  /* Night Owl's dim comment token (#637777) is 3.87:1 on the code background —
+     below WCAG AA. Raise it to #7e94a8 (5.84:1). `!important` is required to
+     beat Shiki's inline `--shiki-dark` custom property on each span. */
+  html[data-theme="dark"] .astro-code span[style*="--shiki-dark:#637777"] {
+    --shiki-dark: #7e94a8 !important;
+  }
+
   /* Styles for Shiki transformers */
   /* https://shiki.style/packages/transformers */
   .astro-code {

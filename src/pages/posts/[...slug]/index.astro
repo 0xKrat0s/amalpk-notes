@@ -145,7 +145,7 @@ const relatedPosts = getSortedPosts(await getCollection("posts"))
 ---
 
 <PostLayout
-  title={`${title} | ${config.site.title}`}
+  title={`${title} | Amal PK`}
   headline={title}
   description={description}
   ogImage={ogImage}
@@ -299,6 +299,10 @@ const relatedPosts = getSortedPosts(await getCollection("posts"))
       link.className =
         "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
       link.href = "#" + heading.id;
+      link.setAttribute(
+        "aria-label",
+        `Link to this section: ${heading.textContent.trim()}`
+      );
 
       const span = document.createElement("span");
       span.ariaHidden = "true";
