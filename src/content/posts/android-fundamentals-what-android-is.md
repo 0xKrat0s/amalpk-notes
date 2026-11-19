@@ -2,14 +2,18 @@
 author: Amal PK
 pubDatetime: 2026-11-18T18:30:00.000Z
 title: "What Android Is - and How Its Layers Stack"
-featured: false
+featured: true
 draft: false
 tags:
   - "android"
   - "android security"
+  - "mobile security"
   - "android fundamentals"
-description: "Android is three products, five layers and three version numbers. What a security tester needs to know before touching a tool."
+  - "AOSP"
+  - "MASTG"
+description: "Android is three products (AOSP, GMS, OEM) on five stack layers. How API levels, SPL strings, Mainline modules and Binder decide whether a device is vulnerable."
 collection: android/android-fundamentals
+ogImage: "/images/posts/android-fundamentals-what-android-is/android_software_stack.webp"
 ---
  
 _Part 1 of the series **Android Fundamentals for Security Testers**. A condensed overview of the security model lives in [Introduction to Android Security](/posts/introduction-to-android-security/); this series goes deeper, one part at a time._

@@ -2,7 +2,7 @@
 author: Amal PK
 pubDatetime: 2026-06-05T05:53:53.254Z
 title: "Introduction to Android Security: Architecture, Sandbox, IPC, and System Protections"
-featured: true
+featured: false
 draft: false
 tags:
   - "android"
