@@ -78,16 +78,10 @@ interface FeaturesConfig {
 
 interface AnalyticsConfig {
   /**
-   * Google Analytics 4 measurement ID, e.g. "G-XXXXXXXXXX".
-   * Loaded directly via gtag.js (no Google Tag Manager).
-   * When omitted, no analytics script, consent banner, or JSON events are emitted.
+   * Google Tag Manager container ID, e.g. "GTM-XXXXXXX".
+   * When omitted, no analytics script or JSON events are emitted.
    */
-  measurementId?: string;
-  /**
-   * Show the cookie-consent banner and default Consent Mode to "denied".
-   * When false (or omitted), consent defaults to "granted".
-   */
-  consentBanner?: boolean;
+  gtmId?: string;
 }
 
 interface SocialLink {
@@ -125,7 +119,7 @@ interface AstroPaperConfig {
   site: SiteConfig;
   posts?: PostsConfig;
   features?: FeaturesConfig;
-  /** Google Tag Manager / consent banner settings */
+  /** Analytics settings (Google Tag Manager container) */
   analytics?: AnalyticsConfig;
   /** Social profile links shown in header/footer */
   socials?: SocialLink[];
@@ -156,10 +150,7 @@ type ResolvedSiteConfig = Required<
     | "brand"
   >;
 
-type ResolvedAnalyticsConfig = Required<
-  Pick<AnalyticsConfig, "consentBanner">
-> &
-  Pick<AnalyticsConfig, "measurementId">;
+type ResolvedAnalyticsConfig = Pick<AnalyticsConfig, "gtmId">;
 
 export interface ResolvedAstroPaperConfig {
   site: ResolvedSiteConfig;

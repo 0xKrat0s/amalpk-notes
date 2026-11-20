@@ -39,8 +39,7 @@ const config: ResolvedAstroPaperConfig = {
   socials: userConfig.socials ?? [],
   shareLinks: userConfig.shareLinks ?? [],
   analytics: {
-    measurementId: userConfig.analytics?.measurementId,
-    consentBanner: userConfig.analytics?.consentBanner ?? false,
+    gtmId: userConfig.analytics?.gtmId,
   },
 };
 

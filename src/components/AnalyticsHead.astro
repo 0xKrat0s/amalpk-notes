@@ -1,62 +1,24 @@
 ---
 /**
- * Analytics `<head>` block: Consent Mode v2 defaults + GA4 loaded directly
- * via gtag.js (no Google Tag Manager).
+ * Analytics `<head>` block: the Google Tag Manager container.
  *
  * Kept in its own component because the inline scripts must render verbatim.
  * Nesting `<script>` tags inside an Astro conditional expression breaks the
  * Prettier Astro parser, and this block is easier to audit on its own.
- *
- * Render order matters: the consent default must execute before gtag.js loads.
  */
 import config from "@/config";
 
 const { analytics } = config;
 
-const measurementId = analytics.measurementId ?? "";
-const initialConsent = analytics.consentBanner ? "denied" : "granted";
+const gtmId = analytics.gtmId ?? "";
 ---
 
-<script is:inline define:vars={{ initialConsent }}>
+<script is:inline>
   window.dataLayer = window.dataLayer || [];
-  window.gtag =
-    window.gtag ||
-    function () {
-      window.dataLayer.push(arguments);
-    };
-  window.gtag("consent", "default", {
-    ad_storage: initialConsent,
-    ad_user_data: initialConsent,
-    ad_personalization: initialConsent,
-    analytics_storage: initialConsent,
-    functionality_storage: "granted",
-    security_storage: "granted",
-    wait_for_update: 500,
-  });
-  window.gtag("set", "url_passthrough", true);
-  window.gtag("set", "ads_data_redaction", true);
-
-  // Restore a previous choice so repeat visitors aren't re-prompted.
-  try {
-    if (localStorage.getItem("consent-mode") === "granted") {
-      window.gtag("consent", "update", {
-        ad_storage: "granted",
-        ad_user_data: "granted",
-        ad_personalization: "granted",
-        analytics_storage: "granted",
-      });
-    }
-  } catch (e) {}
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
 </script>
 
-<script
-  is:inline
-  async
-  src={`https://www.googletagmanager.com/gtm.js?id=${measurementId}`}
-></script>
-
-<script is:inline define:vars={{ measurementId }}>
-  // Pageviews are sent manually on astro:page-load (see AnalyticsBody),
-  // so GA4's automatic one is disabled to avoid double counting.
-  window.gtag("config", measurementId, { send_page_view: false });
-</script>
+<script is:inline async src={`https://www.googletagmanager.com/gtm.js?id=${gtmId}`}></script>

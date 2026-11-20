@@ -3,7 +3,6 @@ import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
-import ConsentBanner from "@/components/ConsentBanner.astro";
 import AnalyticsHead from "@/components/AnalyticsHead.astro";
 import AnalyticsBody from "@/components/AnalyticsBody.astro";
 import config from "@/config";
@@ -255,24 +254,21 @@ const robotsContent = noindex
     />
 
     {
-      analytics.measurementId && (
+      analytics.gtmId && (
         <link rel="preconnect" href="https://www.googletagmanager.com" />
       )
     }
-    {/* Consent Mode v2 defaults must run before gtag.js loads. */}
-    {analytics.measurementId && <AnalyticsHead />}
+    {analytics.gtmId && <AnalyticsHead />}
 
     <ClientRouter />
   </head>
   <body
     class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
   >
-    {/* One pageview per ClientRouter navigation (sent by gtag.js). */}
-    {analytics.measurementId && <AnalyticsBody />}
+    {/* One pageview event per ClientRouter navigation (consumed by tags in the container). */}
+    {analytics.gtmId && <AnalyticsBody />}
 
     <slot />
-
-    {analytics.measurementId && analytics.consentBanner && <ConsentBanner />}
 
     <script>
       import "@/scripts/theme";

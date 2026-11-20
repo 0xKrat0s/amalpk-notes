@@ -43,9 +43,7 @@ export default defineAstroPaperConfig({
     toc: true,
   },
   analytics: {
-    measurementId: "G-DS4WMQSNQ6",
-    // No consent banner: Consent Mode defaults to "granted" for all visitors.
-    consentBanner: false,
+    gtmId: "GTM-P7K99KRV",
   },
   socials: [
     { name: "github", url: "https://github.com/0xkratos" },
