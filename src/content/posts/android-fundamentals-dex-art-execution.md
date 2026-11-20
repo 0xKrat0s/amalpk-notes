@@ -1,6 +1,6 @@
 ---
 author: Amal PK
-pubDatetime: 2026-11-20T18:30:00.000Z
+pubDatetime: 2026-11-20T12:00:00.000Z
 title: "How Android Executes Your App - DEX, ART and Zygote"
 featured: false
 draft: false
