@@ -44,7 +44,8 @@ export default defineAstroPaperConfig({
   },
   analytics: {
     measurementId: "G-FTR1LKNMX",
-    consentBanner: true,
+    // No consent banner: Consent Mode defaults to "granted" for all visitors.
+    consentBanner: false,
   },
   socials: [
     { name: "github", url: "https://github.com/0xkratos" },
