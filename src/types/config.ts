@@ -78,10 +78,11 @@ interface FeaturesConfig {
 
 interface AnalyticsConfig {
   /**
-   * Google Tag Manager container ID, e.g. "GTM-XXXXXXX".
+   * Google Analytics 4 measurement ID, e.g. "G-XXXXXXXXXX".
+   * Loaded directly via gtag.js (no Google Tag Manager).
    * When omitted, no analytics script, consent banner, or JSON events are emitted.
    */
-  gtmId?: string;
+  measurementId?: string;
   /**
    * Show the cookie-consent banner and default Consent Mode to "denied".
    * When false (or omitted), consent defaults to "granted".
@@ -158,7 +159,7 @@ type ResolvedSiteConfig = Required<
 type ResolvedAnalyticsConfig = Required<
   Pick<AnalyticsConfig, "consentBanner">
 > &
-  Pick<AnalyticsConfig, "gtmId">;
+  Pick<AnalyticsConfig, "measurementId">;
 
 export interface ResolvedAstroPaperConfig {
   site: ResolvedSiteConfig;

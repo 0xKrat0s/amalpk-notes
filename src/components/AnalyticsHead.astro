@@ -1,18 +1,19 @@
 ---
 /**
- * Analytics `<head>` block: Consent Mode v2 defaults + the GTM container.
+ * Analytics `<head>` block: Consent Mode v2 defaults + GA4 loaded directly
+ * via gtag.js (no Google Tag Manager).
  *
  * Kept in its own component because the inline scripts must render verbatim.
  * Nesting `<script>` tags inside an Astro conditional expression breaks the
  * Prettier Astro parser, and this block is easier to audit on its own.
  *
- * Render order matters: the consent default must execute before GTM loads.
+ * Render order matters: the consent default must execute before gtag.js loads.
  */
 import config from "@/config";
 
 const { analytics } = config;
 
-const gtmId = analytics.gtmId ?? "";
+const measurementId = analytics.measurementId ?? "";
 const initialConsent = analytics.consentBanner ? "denied" : "granted";
 ---
 
@@ -48,15 +49,14 @@ const initialConsent = analytics.consentBanner ? "denied" : "granted";
   } catch (e) {}
 </script>
 
-<script is:inline define:vars={{ gtmId }}>
-  (function (w, d, s, l, i) {
-    w[l] = w[l] || [];
-    w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-    var f = d.getElementsByTagName(s)[0],
-      j = d.createElement(s),
-      dl = l !== "dataLayer" ? "&l=" + l : "";
-    j.async = true;
-    j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-    f.parentNode.insertBefore(j, f);
-  })(window, document, "script", "dataLayer", gtmId);
+<script
+  is:inline
+  async
+  src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+></script>
+
+<script is:inline define:vars={{ measurementId }}>
+  // Pageviews are sent manually on astro:page-load (see AnalyticsBody),
+  // so GA4's automatic one is disabled to avoid double counting.
+  window.gtag("config", measurementId, { send_page_view: false });
 </script>

@@ -1,39 +1,28 @@
 ---
 /**
- * Analytics body block: the GTM `<noscript>` fallback and the SPA pageview
- * listener.
+ * Analytics body block: the GA4 SPA pageview listener.
  *
  * `astro:page-load` fires on the initial load and after every ClientRouter
- * navigation, so pushing one `page_view` there gives exactly one event per
- * navigation for the GA4 tag configured in Google Tag Manager.
+ * navigation, so sending one `page_view` there gives exactly one event per
+ * navigation for GA4 (loaded directly via gtag.js — see AnalyticsHead).
  */
 import config from "@/config";
 
 const { analytics } = config;
-const gtmId = analytics.gtmId ?? "";
+const measurementId = analytics.measurementId ?? "";
 ---
 
-<noscript>
-  <iframe
-    src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
-    height="0"
-    width="0"
-    style="display:none;visibility:hidden"
-    title="Google Tag Manager"></iframe>
-</noscript>
-
-<script is:inline>
+<script is:inline define:vars={{ measurementId }}>
   (function () {
     if (window.__pageviewBound) return;
     window.__pageviewBound = true;
     document.addEventListener("astro:page-load", function () {
-      var pageview = {
+      window.gtag("event", "page_view", {
         page_location: window.location.href,
         page_path: window.location.pathname + window.location.search,
         page_title: document.title,
-      };
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: "page_view", ...pageview });
+        send_to: measurementId,
+      });
     });
   })();
 </script>
