@@ -43,7 +43,7 @@ export default defineAstroPaperConfig({
     toc: true,
   },
   analytics: {
-    measurementId: "G-FTR1LKNMX",
+    measurementId: "G-DS4WMQSNQ6",
     // No consent banner: Consent Mode defaults to "granted" for all visitors.
     consentBanner: false,
   },
